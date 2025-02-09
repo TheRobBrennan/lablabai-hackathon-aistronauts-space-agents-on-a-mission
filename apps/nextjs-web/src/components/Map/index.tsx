@@ -10,10 +10,17 @@ const DEFAULT_LNG = -122.4194;  // San Francisco
 const DEFAULT_LAT = 37.7749;
 const DEFAULT_ZOOM = 9;
 
-// Add to the existing constants
+// LocalStorage keys
+const STORAGE_KEYS = {
+    lng: 'map_last_lng',
+    lat: 'map_last_lat',
+    zoom: 'map_last_zoom',
+    style: 'map_style',
+} as const;
+
+// Default view state for reset functionality
 const DEFAULT_VIEW = {
-    lng: DEFAULT_LNG,
-    lat: DEFAULT_LAT,
+    center: [DEFAULT_LNG, DEFAULT_LAT] as [number, number],
     zoom: DEFAULT_ZOOM,
     bearing: 0,
     pitch: 0,
@@ -25,14 +32,6 @@ const AVAILABLE_STYLES = {
     'Outdoors': 'mapbox://styles/mapbox/outdoors-v12',
     'Light': 'mapbox://styles/mapbox/light-v11',
     'Dark': 'mapbox://styles/mapbox/dark-v11',
-} as const;
-
-// LocalStorage keys
-const STORAGE_KEYS = {
-    lng: 'map_last_lng',
-    lat: 'map_last_lat',
-    zoom: 'map_last_zoom',
-    style: 'map_style',
 } as const;
 
 export default function Map() {
@@ -192,6 +191,49 @@ export default function Map() {
 
                         mapContainer.current.appendChild(styleSelect);
                     }
+
+                    // Add reset view control
+                    class ResetViewControl {
+                        _map?: mapboxgl.Map;
+                        _container!: HTMLDivElement;
+
+                        constructor() {
+                            this._container = document.createElement('div');
+                            this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                        }
+
+                        onAdd(map: mapboxgl.Map) {
+                            this._map = map;
+
+                            const button = document.createElement('button');
+                            button.className = 'mapboxgl-ctrl-reset-view';
+                            button.type = 'button';
+                            button.setAttribute('aria-label', 'Reset map view');
+
+                            button.innerHTML = `
+                                <span style="font-size: 18px;" aria-hidden="true">⌂</span>
+                            `;
+
+                            button.addEventListener('click', () => {
+                                if (this._map) {
+                                    this._map.flyTo({
+                                        ...DEFAULT_VIEW,
+                                        duration: 1500,
+                                    });
+                                }
+                            });
+
+                            this._container.appendChild(button);
+                            return this._container;
+                        }
+
+                        onRemove() {
+                            this._container.parentNode?.removeChild(this._container);
+                        }
+                    }
+
+                    // Add reset view control
+                    mapInstance?.addControl(new ResetViewControl(), 'top-right');
 
                     // Trigger geolocation if no stored location
                     if (!localStorage.getItem(STORAGE_KEYS.lat)) {
