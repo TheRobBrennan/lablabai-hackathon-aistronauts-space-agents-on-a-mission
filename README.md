@@ -24,6 +24,27 @@ Design an AI agent that transforms space exploration - whether by automating tas
 ![](./screenshots/Screenshot%202025-02-08%20at%205.55.00 PM.png)
 ![](./screenshots/Screenshot%202025-02-08%20at%205.59.14 PM.png)
 
+### Suggested Topics to Explore
+
+#### Automation of Space Operations
+
+🛰️ Problem Statement: Space missions require managing complex operations, often relying on repetitive and time-intensive tasks.
+
+Challenge: Develop AI agents to automate mission planning, resource allocation, and communication systems, enhancing efficiency and reducing human workload.
+
+
+#### Reducing Operational Inefficiencies
+
+🚀 Problem Statement: Space agencies face challenges in optimizing resource use and minimizing waste during missions.
+
+Challenge: Design AI agents that detect inefficiencies, optimize fuel consumption, and streamline supply chain logistics for space missions.
+
+#### Enhancing Citizen Access to Space Data
+
+🌌 Problem Statement: Access to space-related data and insights can be challenging for researchers, educators, and the general public.
+
+Challenge: Build AI agents that simplify access to space data, enable educational tools, and foster citizen engagement in space exploration.
+
 ## Ground control
 
 Checklist of necessary steps to complete the mission:
