@@ -149,6 +149,15 @@ export default function Map() {
 
                 mapContainer.current.appendChild(styleSelect);
 
+                // Add scale bar
+                map.current.addControl(
+                    new mapboxgl.ScaleControl({
+                        maxWidth: 150,
+                        unit: 'metric'
+                    }),
+                    'bottom-left'
+                );
+
                 // Store location when map moves
                 map.current.on('moveend', () => {
                     if (!map.current) return;
