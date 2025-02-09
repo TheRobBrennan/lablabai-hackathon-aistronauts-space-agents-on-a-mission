@@ -10,6 +10,15 @@ const DEFAULT_LNG = -122.4194;  // San Francisco
 const DEFAULT_LAT = 37.7749;
 const DEFAULT_ZOOM = 9;
 
+// Add to the existing constants
+const DEFAULT_VIEW = {
+    lng: DEFAULT_LNG,
+    lat: DEFAULT_LAT,
+    zoom: DEFAULT_ZOOM,
+    bearing: 0,
+    pitch: 0,
+} as const;
+
 const AVAILABLE_STYLES = {
     'Satellite': 'mapbox://styles/mapbox/satellite-v9',
     'Streets': 'mapbox://styles/mapbox/streets-v12',
@@ -165,6 +174,50 @@ export default function Map() {
                     }),
                     'top-right'
                 );
+
+                // Create custom reset view control
+                class ResetViewControl {
+                    _map?: mapboxgl.Map;
+                    _container: HTMLDivElement;
+
+                    onAdd(map: mapboxgl.Map) {
+                        this._map = map;
+                        this._container = document.createElement('div');
+                        this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+
+                        const button = document.createElement('button');
+                        button.className = 'mapboxgl-ctrl-reset-view';
+                        button.type = 'button';
+                        button.setAttribute('aria-label', 'Reset map view');
+
+                        // Add home icon using HTML entity
+                        button.innerHTML = `
+                            <span style="font-size: 18px;" aria-hidden="true">⌂</span>
+                        `;
+
+                        button.addEventListener('click', () => {
+                            if (this._map) {
+                                this._map.flyTo({
+                                    center: [DEFAULT_VIEW.lng, DEFAULT_VIEW.lat],
+                                    zoom: DEFAULT_VIEW.zoom,
+                                    bearing: DEFAULT_VIEW.bearing,
+                                    pitch: DEFAULT_VIEW.pitch,
+                                    duration: 1500,
+                                });
+                            }
+                        });
+
+                        this._container.appendChild(button);
+                        return this._container;
+                    }
+
+                    onRemove() {
+                        this._container.parentNode?.removeChild(this._container);
+                    }
+                }
+
+                // Add reset view control
+                map.current.addControl(new ResetViewControl(), 'top-right');
 
                 // Store location when map moves
                 map.current.on('moveend', () => {
