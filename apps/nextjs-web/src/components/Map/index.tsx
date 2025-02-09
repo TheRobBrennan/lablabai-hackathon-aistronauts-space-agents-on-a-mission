@@ -10,11 +10,20 @@ const DEFAULT_LNG = -122.4194;  // San Francisco
 const DEFAULT_LAT = 37.7749;
 const DEFAULT_ZOOM = 9;
 
+const AVAILABLE_STYLES = {
+    'Satellite': 'mapbox://styles/mapbox/satellite-v9',
+    'Streets': 'mapbox://styles/mapbox/streets-v12',
+    'Outdoors': 'mapbox://styles/mapbox/outdoors-v12',
+    'Light': 'mapbox://styles/mapbox/light-v11',
+    'Dark': 'mapbox://styles/mapbox/dark-v11',
+} as const;
+
 // LocalStorage keys
 const STORAGE_KEYS = {
     lng: 'map_last_lng',
     lat: 'map_last_lat',
     zoom: 'map_last_zoom',
+    style: 'map_style',
 } as const;
 
 export default function Map() {
@@ -22,6 +31,11 @@ export default function Map() {
     const map = useRef<mapboxgl.Map | null>(null);
     const [hasToken, setHasToken] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [currentStyle, setCurrentStyle] = useState<string>(
+        typeof window !== 'undefined'
+            ? localStorage.getItem(STORAGE_KEYS.style) || AVAILABLE_STYLES.Satellite
+            : AVAILABLE_STYLES.Satellite
+    );
 
     // Get stored coordinates or use defaults
     const getStoredLocation = () => {
@@ -40,6 +54,31 @@ export default function Map() {
         console.log('Token available:', !!token);
         setHasToken(Boolean(token));
     }, []);
+
+    // Helper function to preserve map state during style changes
+    const switchMapStyle = async (map: mapboxgl.Map, styleUri: string) => {
+        return new Promise<void>((resolve) => {
+            const center = map.getCenter();
+            const zoom = map.getZoom();
+            const bearing = map.getBearing();
+            const pitch = map.getPitch();
+
+            // Remove previous listeners to avoid duplicates
+            map.off('style.load');
+
+            // Set up the style load handler before changing the style
+            map.once('style.load', () => {
+                map.setCenter(center);
+                map.setZoom(zoom);
+                map.setBearing(bearing);
+                map.setPitch(pitch);
+                resolve();
+            });
+
+            // Then change the style
+            map.setStyle(styleUri);
+        });
+    };
 
     // Separate useEffect for map initialization
     useEffect(() => {
@@ -62,9 +101,10 @@ export default function Map() {
 
                 map.current = new mapboxgl.Map({
                     container: mapContainer.current,
-                    style: 'mapbox://styles/mapbox/satellite-v9',
+                    style: currentStyle,
                     center: [lng, lat],
                     zoom: zoom,
+                    preserveDrawingBuffer: true, // Helps with style switches
                 });
 
                 // Add navigation controls (zoom, compass, etc.)
@@ -80,6 +120,34 @@ export default function Map() {
                 });
 
                 map.current.addControl(geolocateControl, 'top-right');
+
+                // Add style switcher
+                const styleSelect = document.createElement('select');
+                styleSelect.className = 'mapboxgl-ctrl mapboxgl-ctrl-group absolute top-0 left-0 m-3 p-2 bg-white dark:bg-gray-800 rounded shadow-lg text-sm';
+
+                Object.entries(AVAILABLE_STYLES).forEach(([label, uri]) => {
+                    const option = document.createElement('option');
+                    option.value = uri;
+                    option.text = label;
+                    option.selected = uri === currentStyle;
+                    styleSelect.appendChild(option);
+                });
+
+                styleSelect.addEventListener('change', async (e) => {
+                    const newStyle = (e.target as HTMLSelectElement).value;
+                    if (map.current) {
+                        try {
+                            await switchMapStyle(map.current, newStyle);
+                            setCurrentStyle(newStyle);
+                            localStorage.setItem(STORAGE_KEYS.style, newStyle);
+                        } catch (err) {
+                            console.error('Style switch failed:', err);
+                            setError('Failed to switch map style');
+                        }
+                    }
+                });
+
+                mapContainer.current.appendChild(styleSelect);
 
                 // Store location when map moves
                 map.current.on('moveend', () => {
@@ -114,9 +182,12 @@ export default function Map() {
         requestAnimationFrame(initializeMap);
 
         return () => {
-            map.current?.remove();
+            if (map.current) {
+                map.current.off('style.load');
+                map.current.remove();
+            }
         };
-    }, [hasToken]);
+    }, [hasToken]);  // Remove currentStyle dependency
 
     if (error) {
         return (
