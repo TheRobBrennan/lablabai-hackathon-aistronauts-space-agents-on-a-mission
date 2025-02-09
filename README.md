@@ -45,6 +45,28 @@ Challenge: Design AI agents that detect inefficiencies, optimize fuel consumptio
 
 Challenge: Build AI agents that simplify access to space data, enable educational tools, and foster citizen engagement in space exploration.
 
+### Suggested Technologies
+
+#### AI/ML API
+AI/ML API provides advanced features like text completion, image inference, speech-to-text, and more, offering seamless integration, high performance, and secure key management.
+
+👉 Read more about AI/ML API
+
+#### AutoGen
+AutoGen is an open-source framework simplifying the creation of multi-agent systems using LLMs, enabling coordinated AI interactions with humans and tools.
+
+👉 Read more about [AutoGen](https://lablab.ai/tech/microsoft/autogen)
+
+#### AgentOps
+AgentOps is a platform for monitoring, debugging, and optimizing AI agents with tools like session replays, metrics dashboards, and custom reporting in real-time.
+
+👉 Read more about [AgentOps](https://lablab.ai/tech/agentops)
+
+#### CrewAI 
+CrewAI is a modular, multi-agent framework enabling AI teams for streamlined workflows, automation, and insights, perfect for developers and businesses.
+
+👉 Read more about [CrewAI](https://lablab.ai/tech/crew-ai)
+
 ## Ground control
 
 Checklist of necessary steps to complete the mission:
