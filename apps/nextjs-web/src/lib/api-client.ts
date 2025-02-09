@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API_PORT = process.env.NEXT_PUBLIC_API_PORT || '8000'
+const API_HOST = process.env.NEXT_PUBLIC_API_HOST || 'localhost'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || `http://${API_HOST}:${API_PORT}`
 
 export async function fetchFromAPI(endpoint: string, options: RequestInit = {}) {
     const url = `${API_BASE_URL}${endpoint}`
