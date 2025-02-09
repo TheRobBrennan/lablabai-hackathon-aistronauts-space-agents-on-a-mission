@@ -85,6 +85,7 @@ Checklist of necessary steps to complete the mission:
     - Evaluate the feasibility of each idea: in terms of available AI models, required data, technical expertise, and potential impact.
     - Resource Allocation: Consider the resources (timeline of hackathon, developers, availability of API Keys) needed to implement each idea. Choose ideas that align with available resources.
 - BUILD: Build a prototype for your solution
+    - [MVP Plan: Satellite Imagery Analysis Platform](./documentation/MVP_PLAN_SATELLITE_IMAGERY_ANALYSIS_PLATFORM.md)
 - SUBMIT: Submit your solution to the hackathon per the [Submission Guidelines](https://lablab.ai/delivering-your-hackathon-solution)
     - Product Description
     - Presentation (not to exceed 5 minutes)
