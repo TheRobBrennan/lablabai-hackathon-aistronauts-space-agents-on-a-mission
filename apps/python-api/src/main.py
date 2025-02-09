@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import satellite
+from .app.routes import satellite
 
 app = FastAPI(
     title="Satellite Imagery Analysis API",
@@ -18,7 +18,7 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(satellite.router, prefix="/api/v1")
+app.include_router(satellite.router, prefix="/api/v1/satellite")
 
 @app.get("/health")
 async def health_check():
