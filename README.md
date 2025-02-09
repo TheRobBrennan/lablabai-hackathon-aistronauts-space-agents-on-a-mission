@@ -79,6 +79,7 @@ Checklist of necessary steps to complete the mission:
 - Create or join a team on LabLab.ai
 - Review pitches from other teams for the hackathon - [OTHER_PITCHES.md](./documentation/OTHER_PITCHES.md)
 - BRAINSTORM: 2-3 concepts for an AI agent solution that transforms space exploration
+    - LabLab.AI AI Startup ideas - [AI_STARTUP_IDEAS.md](./documentation/LABLABAI_AI_STARTUP_IDEAS.md)
     - After generating a list of potential solutions, the team should evaluate each idea based on factors such as feasibility, scalability, profitability, and market potential.
     - Evaluate the feasibility of each idea: in terms of available AI models, required data, technical expertise, and potential impact.
     - Resource Allocation: Consider the resources (timeline of hackathon, developers, availability of API Keys) needed to implement each idea. Choose ideas that align with available resources.
