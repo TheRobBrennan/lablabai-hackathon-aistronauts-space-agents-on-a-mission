@@ -1,6 +1,12 @@
 import Map from '@/components/Map';
+import { api } from '@/lib/api-client';
 
-export default function Home() {
+// Make this page dynamic to avoid static build errors
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const health = await api.health();
+
   return (
     <main className="flex min-h-screen flex-col items-center p-4 sm:p-8">
       <div className="w-full max-w-7xl space-y-8">
@@ -12,6 +18,7 @@ export default function Home() {
           <p className="text-gray-600 dark:text-gray-300">
             Analyze Earth&apos;s features using AI-powered satellite imagery
           </p>
+          <p className="text-sm text-gray-500">API Status: {health.status}</p>
         </div>
 
         {/* Map Section */}
