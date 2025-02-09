@@ -17,5 +17,5 @@ COPY . .
 # Add src directory to Python path
 ENV PYTHONPATH=/app/src
 
-# Run the application
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 
+# The correct way to run uvicorn
+CMD [ "python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ] 

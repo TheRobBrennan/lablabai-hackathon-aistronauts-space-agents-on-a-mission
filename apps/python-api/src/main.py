@@ -12,7 +12,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://lablabai-hackathon-aistronauts-space-agents-on-a-mission.vercel.app"  # Production frontend
+        "https://lablabai-hackathon-aistronauts-space-agents-on-a-mission.vercel.app",
+        "https://lablabai-hackathon-aistronauts-space-agents-on-a-mission-r4qq.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
