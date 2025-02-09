@@ -1,4 +1,27 @@
 # Welcome
 This is my project for a potential LabLab AI Hackathon submission for the [AIstronauts: Space Agents on a mission](https://lablab.ai/event/aistronauts-space-agents-on-a-mission?utm_medium=newsletter_paid&utm_source=email1&utm_campaign=AIstronauts) hackathon - held from **Friday, February 7th 2025 - 9:00 AM PST** to **Sunday, February 9th 2025 - 9:00 AM PST**.
 
+![](./screenshots/cm5xsfsfx000q357q5hktprpp_imageLink_xm1pbz0a98.png)
+
 Given that I am starting the project midway through the hackathon - roughly at **5:30 PM PST** on **Saturday, February 8th, 2025** - I will be curious to see what I wind up doing or creating. 😅
+
+## Your mission
+Design an AI agent that transforms space exploration - whether by automating tasks, optimizing workflows, or solving key challenges. Build intelligent systems that create real impact!
+
+![](./screenshots/Screenshot%202025-02-08%20at%205.49.35 PM.png)
+![](./screenshots/Screenshot%202025-02-08%20at%205.52.10 PM.png)
+![](./screenshots/Screenshot%202025-02-08%20at%205.53.17 PM.png)
+![](./screenshots/Screenshot%202025-02-08%20at%205.55.00 PM.png)
+![](./screenshots/Screenshot%202025-02-08%20at%205.59.14 PM.png)
+
+## Ground control
+
+Checklist of necessary steps to complete the mission:
+
+- [ ] Create or join a team on LabLab.ai
+- [ ] BRAINSTORM: 2-3 concepts for an AI agent solution that transforms space exploration
+- [ ] BUILD: Build a prototype for your solution
+- [ ] SUBMIT: Submit your solution to the hackathon
+    - [ ] Product Description
+    - [ ] Presentation (not to exceed 5 minutes)
+    - [ ] GitHub link with the demo
