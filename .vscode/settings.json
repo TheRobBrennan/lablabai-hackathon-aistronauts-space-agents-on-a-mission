@@ -4,6 +4,7 @@
         "aistronauts",
         "APOD",
         "chatbots",
+        "Contextualizer",
         "Earthdata",
         "Explainability",
         "gamification",
@@ -29,6 +30,7 @@
         "SRHR",
         "stablecoins",
         "Streamlit",
+        "Supabase",
         "underserved",
         "USGS"
     ]
