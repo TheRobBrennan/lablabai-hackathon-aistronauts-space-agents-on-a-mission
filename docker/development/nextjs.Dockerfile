@@ -1,19 +1,21 @@
-FROM node:20.11.1-alpine
-
+FROM node:20.11.1-alpine AS deps
 WORKDIR /app
-
-# Install dependencies only when needed
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
-# Copy local code to the container
+FROM node:20.11.1-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Next.js collects anonymous telemetry data about general usage - disable it
 ENV NEXT_TELEMETRY_DISABLED 1
-
-# Build the Next.js app
 RUN npm run build
 
-# Start the application
+FROM node:20.11.1-alpine AS runner
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED 1
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+
 CMD ["npm", "run", "dev"] 
