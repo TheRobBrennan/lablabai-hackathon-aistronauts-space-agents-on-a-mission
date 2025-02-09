@@ -158,6 +158,14 @@ export default function Map() {
                     'bottom-left'
                 );
 
+                // Add fullscreen control
+                map.current.addControl(
+                    new mapboxgl.FullscreenControl({
+                        container: mapContainer.current
+                    }),
+                    'top-right'
+                );
+
                 // Store location when map moves
                 map.current.on('moveend', () => {
                     if (!map.current) return;
