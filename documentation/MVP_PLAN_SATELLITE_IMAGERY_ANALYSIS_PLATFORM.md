@@ -18,6 +18,11 @@ This project aims to build an AI-powered platform that analyzes satellite imager
 - **Docker** – for local development consistency
 - **Vercel (Serverless Python Functions)** – for backend deployment
 
+### **Authentication**
+- **Google Social Login (preferred)** – for lightweight authentication
+- **Alternative:** On-the-fly password issuance with SQLite for local user data storage
+- **Vercel Analytics** – for tracking interactions while maintaining privacy best practices
+
 ## **APIs & External Services**
 | API/Service | Purpose |
 |------------|---------|
@@ -36,6 +41,7 @@ This project aims to build an AI-powered platform that analyzes satellite imager
 3. **AI-Powered Change Detection** – Uses pre-trained models to detect deforestation, urban expansion, and climate change indicators.
 4. **Map Overlays for Insights** – AI-generated results will be visually represented on the map.
 5. **AI-Generated Reports** – CrewAI agents summarize findings into readable insights.
+6. **Basic Authentication System** – Google login or lightweight password issuance for tracking & telemetry.
 
 ### **Quick Wins for MVP**
 - Use **JSON-based default locations** for faster API calls and testing.
@@ -48,6 +54,7 @@ This project aims to build an AI-powered platform that analyzes satellite imager
 | 🌍 **Frontend (UI)** | Next.js 15 + Tailwind + Mapbox | Deployed to Vercel |
 | 🛰 **Satellite Image Fetcher** | Python (FastAPI) | Vercel Serverless Function |
 | 🤖 **AI Image Processor** | CrewAI (Python) + Hugging Face | Vercel Serverless Function |
+| 🔐 **Auth System** | NextAuth.js (Google Login) or SQLite-based auth | Deployed within Next.js app |
 
 ## **CrewAI Agent Setup**
 | Agent Role | Responsibility |
@@ -65,13 +72,14 @@ This project aims to build an AI-powered platform that analyzes satellite imager
 | **12:15am - 1:30am** | Basic map UI + JSON default locations |
 | **1:30am - 3:00am** | Python API (FastAPI) to fetch satellite data |
 | **3:00am - 4:30am** | AI-powered image analysis (CrewAI + Hugging Face) |
-| **4:30am - 6:00am** | Overlays, reports, and polish MVP |
+| **4:30am - 6:00am** | Overlays, authentication, reports, and polish MVP |
 
 ## **Next Steps**
 - [ ] Initialize Next.js 15 project with Docker & Tailwind setup
 - [ ] Implement basic Mapbox / Leaflet UI with JSON-based locations
 - [ ] Develop FastAPI service for satellite image retrieval
 - [ ] Integrate AI models for change detection using Hugging Face
+- [ ] Implement Google login or alternative lightweight authentication system
 - [ ] Deploy Python backend to Vercel
 - [ ] Finalize AI-generated reports and overlays
 
