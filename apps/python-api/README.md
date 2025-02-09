@@ -95,3 +95,16 @@ Required in `.env`:
 - [ ] Add CrewAI agent configuration
 - [ ] Create analysis endpoints
 - [ ] Add tests
+
+## Deployment
+
+This API is automatically deployed to Vercel. The deployment process is triggered on:
+- Pushes to `main` branch
+- Pull request creation/updates
+
+### Environment Variables
+
+Configure these in Vercel project settings:
+- `OPENAI_API_KEY`
+- `NASA_API_KEY`
+- `SENTINEL_HUB_API_KEY` (optional)
