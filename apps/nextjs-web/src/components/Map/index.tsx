@@ -17,34 +17,80 @@ export default function Map() {
     const [lat] = useState(INITIAL_LAT);
     const [zoom] = useState(INITIAL_ZOOM);
     const [hasToken, setHasToken] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
+    // First useEffect to check token and set state
     useEffect(() => {
         const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+        console.log('Token available:', !!token);
         setHasToken(Boolean(token));
+    }, []);
 
-        if (!mapContainer.current || map.current || !token) return;
+    // Separate useEffect for map initialization
+    useEffect(() => {
+        if (!hasToken) return;
 
-        mapboxgl.accessToken = token;
+        // Wait for next tick to ensure container is mounted
+        const initializeMap = () => {
+            if (!mapContainer.current || map.current) {
+                console.log('Container check:', {
+                    hasContainer: !!mapContainer.current,
+                    hasMap: !!map.current
+                });
+                return;
+            }
 
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/satellite-v9', // Satellite imagery
-            center: [lng, lat],
-            zoom: zoom,
-        });
+            try {
+                const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
+                mapboxgl.accessToken = token;
 
-        // Cleanup on unmount
+                map.current = new mapboxgl.Map({
+                    container: mapContainer.current,
+                    style: 'mapbox://styles/mapbox/satellite-v9',
+                    center: [lng, lat],
+                    zoom: zoom,
+                });
+
+                map.current.on('load', () => {
+                    console.log('Map loaded successfully');
+                });
+
+                map.current.on('error', (e) => {
+                    console.error('Mapbox error:', e);
+                    setError(e.error.message);
+                });
+
+            } catch (err) {
+                console.error('Map initialization error:', err);
+                setError(err instanceof Error ? err.message : 'Failed to initialize map');
+            }
+        };
+
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(initializeMap);
+
         return () => {
             map.current?.remove();
         };
-    }, [lng, lat, zoom]);
+    }, [hasToken, lng, lat, zoom]);
+
+    if (error) {
+        return (
+            <div className="relative w-full h-[600px] rounded-lg overflow-hidden bg-red-50 dark:bg-red-900/10 flex items-center justify-center">
+                <div className="text-center p-6">
+                    <h3 className="text-lg font-semibold mb-2 text-red-600 dark:text-red-400">Map Error</h3>
+                    <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                </div>
+            </div>
+        );
+    }
 
     if (!hasToken) {
         return <MapFallback />;
     }
 
     return (
-        <div className="relative w-full h-[600px] rounded-lg overflow-hidden">
+        <div className="relative w-full h-[600px] rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
             <div ref={mapContainer} className="w-full h-full" />
         </div>
     );
