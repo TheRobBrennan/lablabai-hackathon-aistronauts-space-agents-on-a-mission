@@ -9,6 +9,11 @@ Given that I am starting the project midway through the hackathon - roughly at *
 
 Source: [LabLab.ai Hackathon Guide (~6:33)](https://www.youtube.com/watch?v=43PCWgt1Pn0)
 
+> By processing data, understanding context, and executing actions, AI Agents enhance efficiency, reduce errors, and provide intelligent solutions to complex challenges.
+
+> Their ability to operate continuously and make informed decisions based on real-time data makes them invaluable in modern technology landscapes.
+
+Source: [LabLab.AI AIstronauts: Space Agents on a mission](https://lablab.ai/event/aistronauts-space-agents-on-a-mission)
 
 ## Your mission
 Design an AI agent that transforms space exploration - whether by automating tasks, optimizing workflows, or solving key challenges. Build intelligent systems that create real impact!
