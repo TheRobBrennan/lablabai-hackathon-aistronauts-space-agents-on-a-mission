@@ -66,44 +66,52 @@ export default function Map() {
 
     // Helper function to preserve map state during style changes
     const switchMapStyle = async (map: mapboxgl.Map, styleUri: string) => {
-        return new Promise<void>((resolve) => {
-            const center = map.getCenter();
-            const zoom = map.getZoom();
-            const bearing = map.getBearing();
-            const pitch = map.getPitch();
+        return new Promise<void>((resolve, reject) => {
+            try {
+                const currentCenter = map.getCenter();
+                const currentZoom = map.getZoom();
+                const currentBearing = map.getBearing();
+                const currentPitch = map.getPitch();
 
-            // Create a handler function we can both add and remove
-            const styleLoadHandler = () => {
-                map.setCenter(center);
-                map.setZoom(zoom);
-                map.setBearing(bearing);
-                map.setPitch(pitch);
-                resolve();
-            };
+                const styleLoadHandler = () => {
+                    try {
+                        requestAnimationFrame(() => {
+                            map.setCenter(currentCenter);
+                            map.setZoom(currentZoom);
+                            map.setBearing(currentBearing);
+                            map.setPitch(currentPitch);
+                            resolve();
+                        });
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
 
-            // Remove previous listener if it exists
-            map.off('style.load', styleLoadHandler);
+                // Clean up existing handlers
+                if (map.loaded()) {
+                    map.off('style.load', styleLoadHandler);
+                }
 
-            // Set up the style load handler before changing the style
-            map.once('style.load', styleLoadHandler);
+                // Set up new handler
+                map.once('style.load', styleLoadHandler);
 
-            // Then change the style
-            map.setStyle(styleUri);
+                // Change the style
+                map.setStyle(styleUri);
+
+            } catch (err) {
+                reject(err);
+            }
         });
     };
 
     // Separate useEffect for map initialization
     useEffect(() => {
-        if (!hasToken || !currentStyle) return;  // Add currentStyle check
+        if (!hasToken || !currentStyle) return;
+
+        let mapInstance: mapboxgl.Map | null = null;
 
         const initializeMap = () => {
-            if (!mapContainer.current || map.current) {
-                console.log('Container check:', {
-                    hasContainer: !!mapContainer.current,
-                    hasMap: !!map.current
-                });
-                return;
-            }
+            if (!mapContainer.current || mapInstance) return;
 
             try {
                 const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
@@ -111,143 +119,100 @@ export default function Map() {
 
                 const { lng, lat, zoom } = getStoredLocation();
 
-                map.current = new mapboxgl.Map({
+                mapInstance = new mapboxgl.Map({
                     container: mapContainer.current,
                     style: currentStyle,
                     center: [lng, lat],
                     zoom: zoom,
-                    preserveDrawingBuffer: true, // Helps with style switches
+                    preserveDrawingBuffer: true,
                 });
 
-                // Add navigation controls (zoom, compass, etc.)
-                map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+                map.current = mapInstance;
 
-                // Add geolocation control
-                const geolocateControl = new mapboxgl.GeolocateControl({
-                    positionOptions: {
-                        enableHighAccuracy: true
-                    },
-                    trackUserLocation: true,
-                    showUserHeading: true
-                });
+                // Wait for map to load before adding controls
+                mapInstance.on('load', () => {
+                    // Add navigation controls
+                    mapInstance?.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-                map.current.addControl(geolocateControl, 'top-right');
+                    // Add geolocation control
+                    const geolocateControl = new mapboxgl.GeolocateControl({
+                        positionOptions: {
+                            enableHighAccuracy: true
+                        },
+                        trackUserLocation: true,
+                        showUserHeading: true
+                    });
 
-                // Add style switcher
-                const styleSelect = document.createElement('select');
-                styleSelect.className = 'mapboxgl-ctrl mapboxgl-ctrl-group absolute top-0 left-0 m-3 p-2 bg-white dark:bg-gray-800 rounded shadow-lg text-sm';
+                    mapInstance?.addControl(geolocateControl, 'top-right');
 
-                Object.entries(AVAILABLE_STYLES).forEach(([label, uri]) => {
-                    const option = document.createElement('option');
-                    option.value = uri;
-                    option.text = label;
-                    option.selected = uri === currentStyle;
-                    styleSelect.appendChild(option);
-                });
+                    // Add fullscreen control
+                    mapInstance?.addControl(
+                        new mapboxgl.FullscreenControl({
+                            container: mapContainer.current
+                        }),
+                        'top-right'
+                    );
 
-                styleSelect.addEventListener('change', async (e) => {
-                    const newStyle = (e.target as HTMLSelectElement).value;
-                    if (map.current) {
-                        try {
-                            await switchMapStyle(map.current, newStyle);
-                            setCurrentStyle(newStyle);
-                            localStorage.setItem(STORAGE_KEYS.style, newStyle);
-                        } catch (err) {
-                            console.error('Style switch failed:', err);
-                            setError('Failed to switch map style');
-                        }
-                    }
-                });
+                    // Add scale control
+                    mapInstance?.addControl(
+                        new mapboxgl.ScaleControl({
+                            maxWidth: 150,
+                            unit: 'metric'
+                        }),
+                        'bottom-left'
+                    );
 
-                mapContainer.current.appendChild(styleSelect);
+                    // Add style switcher
+                    if (mapContainer.current) {
+                        const styleSelect = document.createElement('select');
+                        styleSelect.className = 'mapboxgl-ctrl mapboxgl-ctrl-group absolute top-0 left-0 m-3 p-2 bg-white dark:bg-gray-800 rounded shadow-lg text-sm';
 
-                // Add scale bar
-                map.current.addControl(
-                    new mapboxgl.ScaleControl({
-                        maxWidth: 150,
-                        unit: 'metric'
-                    }),
-                    'bottom-left'
-                );
+                        Object.entries(AVAILABLE_STYLES).forEach(([label, uri]) => {
+                            const option = document.createElement('option');
+                            option.value = uri;
+                            option.text = label;
+                            option.selected = uri === currentStyle;
+                            styleSelect.appendChild(option);
+                        });
 
-                // Add fullscreen control
-                map.current.addControl(
-                    new mapboxgl.FullscreenControl({
-                        container: mapContainer.current
-                    }),
-                    'top-right'
-                );
-
-                // Create custom reset view control
-                class ResetViewControl {
-                    _map?: mapboxgl.Map;
-                    _container!: HTMLDivElement;  // Add definite assignment assertion
-
-                    constructor() {
-                        // Initialize container in constructor
-                        this._container = document.createElement('div');
-                        this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
-                    }
-
-                    onAdd(map: mapboxgl.Map) {
-                        this._map = map;
-
-                        const button = document.createElement('button');
-                        button.className = 'mapboxgl-ctrl-reset-view';
-                        button.type = 'button';
-                        button.setAttribute('aria-label', 'Reset map view');
-
-                        // Add home icon using HTML entity
-                        button.innerHTML = `
-                            <span style="font-size: 18px;" aria-hidden="true">⌂</span>
-                        `;
-
-                        button.addEventListener('click', () => {
-                            if (this._map) {
-                                this._map.flyTo({
-                                    center: [DEFAULT_VIEW.lng, DEFAULT_VIEW.lat],
-                                    zoom: DEFAULT_VIEW.zoom,
-                                    bearing: DEFAULT_VIEW.bearing,
-                                    pitch: DEFAULT_VIEW.pitch,
-                                    duration: 1500,
-                                });
+                        styleSelect.addEventListener('change', async (e) => {
+                            const newStyle = (e.target as HTMLSelectElement).value;
+                            if (mapInstance) {
+                                try {
+                                    await switchMapStyle(mapInstance, newStyle);
+                                    setCurrentStyle(newStyle);
+                                    localStorage.setItem(STORAGE_KEYS.style, newStyle);
+                                } catch (err) {
+                                    console.error('Style switch failed:', err);
+                                    setError('Failed to switch map style');
+                                    styleSelect.value = currentStyle;
+                                }
                             }
                         });
 
-                        this._container.appendChild(button);
-                        return this._container;
+                        mapContainer.current.appendChild(styleSelect);
                     }
 
-                    onRemove() {
-                        this._container.parentNode?.removeChild(this._container);
+                    // Trigger geolocation if no stored location
+                    if (!localStorage.getItem(STORAGE_KEYS.lat)) {
+                        geolocateControl.trigger();
                     }
-                }
-
-                // Add reset view control
-                map.current.addControl(new ResetViewControl(), 'top-right');
+                });
 
                 // Store location when map moves
-                map.current.on('moveend', () => {
-                    if (!map.current) return;
-                    const center = map.current.getCenter();
-                    const zoom = map.current.getZoom();
+                mapInstance.on('moveend', () => {
+                    if (!mapInstance) return;
+                    const center = mapInstance.getCenter();
+                    const zoom = mapInstance.getZoom();
 
                     localStorage.setItem(STORAGE_KEYS.lng, center.lng.toString());
                     localStorage.setItem(STORAGE_KEYS.lat, center.lat.toString());
                     localStorage.setItem(STORAGE_KEYS.zoom, zoom.toString());
                 });
 
-                // Trigger geolocation on first load if no stored location
-                map.current.on('load', () => {
-                    console.log('Map loaded successfully');
-                    if (!localStorage.getItem(STORAGE_KEYS.lat)) {
-                        geolocateControl.trigger();
-                    }
-                });
-
-                map.current.on('error', (e) => {
+                mapInstance.on('error', (e) => {
                     console.error('Mapbox error:', e);
-                    setError(e.error.message);
+                    setError(e.error?.message || 'An error occurred with the map');
                 });
 
             } catch (err) {
@@ -259,16 +224,12 @@ export default function Map() {
         requestAnimationFrame(initializeMap);
 
         return () => {
-            if (map.current) {
-                // Properly remove all listeners
-                map.current.off('style.load', () => { });
-                map.current.off('moveend', () => { });
-                map.current.off('load', () => { });
-                map.current.off('error', () => { });
-                map.current.remove();
+            if (mapInstance) {
+                mapInstance.remove();
             }
+            map.current = null;
         };
-    }, [hasToken, currentStyle]);  // Add currentStyle to dependencies
+    }, [hasToken, currentStyle]);
 
     if (error) {
         return (
