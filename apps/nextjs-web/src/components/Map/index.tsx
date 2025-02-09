@@ -72,17 +72,20 @@ export default function Map() {
             const bearing = map.getBearing();
             const pitch = map.getPitch();
 
-            // Remove previous listeners to avoid duplicates
-            map.off('style.load');
-
-            // Set up the style load handler before changing the style
-            map.once('style.load', () => {
+            // Create a handler function we can both add and remove
+            const styleLoadHandler = () => {
                 map.setCenter(center);
                 map.setZoom(zoom);
                 map.setBearing(bearing);
                 map.setPitch(pitch);
                 resolve();
-            });
+            };
+
+            // Remove previous listener if it exists
+            map.off('style.load', styleLoadHandler);
+
+            // Set up the style load handler before changing the style
+            map.once('style.load', styleLoadHandler);
 
             // Then change the style
             map.setStyle(styleUri);
@@ -91,7 +94,7 @@ export default function Map() {
 
     // Separate useEffect for map initialization
     useEffect(() => {
-        if (!hasToken) return;
+        if (!hasToken || !currentStyle) return;  // Add currentStyle check
 
         const initializeMap = () => {
             if (!mapContainer.current || map.current) {
@@ -178,12 +181,16 @@ export default function Map() {
                 // Create custom reset view control
                 class ResetViewControl {
                     _map?: mapboxgl.Map;
-                    _container: HTMLDivElement;
+                    _container!: HTMLDivElement;  // Add definite assignment assertion
+
+                    constructor() {
+                        // Initialize container in constructor
+                        this._container = document.createElement('div');
+                        this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                    }
 
                     onAdd(map: mapboxgl.Map) {
                         this._map = map;
-                        this._container = document.createElement('div');
-                        this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
 
                         const button = document.createElement('button');
                         button.className = 'mapboxgl-ctrl-reset-view';
@@ -253,11 +260,15 @@ export default function Map() {
 
         return () => {
             if (map.current) {
-                map.current.off('style.load');
+                // Properly remove all listeners
+                map.current.off('style.load', () => { });
+                map.current.off('moveend', () => { });
+                map.current.off('load', () => { });
+                map.current.off('error', () => { });
                 map.current.remove();
             }
         };
-    }, [hasToken]);  // Remove currentStyle dependency
+    }, [hasToken, currentStyle]);  // Add currentStyle to dependencies
 
     if (error) {
         return (
