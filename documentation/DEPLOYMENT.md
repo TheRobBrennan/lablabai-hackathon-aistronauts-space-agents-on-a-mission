@@ -5,6 +5,7 @@
 ### Prerequisites
 1. GitHub repository with our Next.js application
 2. Vercel account connected to GitHub
+3. Mapbox account for map functionality
 
 ### Initial Setup
 1. Create new project in Vercel
@@ -16,7 +17,11 @@
    - Output Directory: Should be auto-detected
 
 ### Environment Variables
-Currently, no environment variables are required for the initial deployment.
+Add the following to your Vercel project settings:
+
+```
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=your_mapbox_token_here
+```
 
 ### Deployment Settings
 - Production Branch: `main`
@@ -27,19 +32,19 @@ Currently, no environment variables are required for the initial deployment.
 The application is deployed and accessible at:
 https://lablabai-hackathon-aistronauts-space-agents-on-a-mission.vercel.app
 
-## Local Development
-Reference our Docker setup in the root directory:
-- Use `npm start` to run the application locally
-- Access the app at http://localhost:3000
+## Mapbox Configuration
 
-## Deployment Workflow
-1. Create feature branch
-2. Make changes and test locally using Docker
-3. Create PR to main
-4. Vercel automatically creates preview deployment
-5. Review preview deployment
-6. Merge to main triggers production deployment
+### Getting an Access Token
+1. Create a Mapbox account at https://account.mapbox.com/auth/signup/
+2. Navigate to Account → Access Tokens
+3. Create a new **public** token with the following scopes:
+   - styles:tiles
+   - styles:read
+   - fonts:read
+   - datasets:read (optional)
+   - vision:read (optional)
 
-## Monitoring
-- Vercel Dashboard: Monitor builds and deployments
-- Vercel Analytics: Track performance metrics (to be configured) 
+Note: Ensure you're creating a public access token (starts with `pk.`), not a secret token (starts with `sk.`).
+
+### Local Development Setup
+1. Copy `.env.example`

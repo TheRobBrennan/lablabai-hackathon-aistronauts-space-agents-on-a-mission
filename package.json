@@ -13,7 +13,7 @@
   "license": "MIT",
   "author": "Rob Brennan <rob@sploosh.ai>",
   "scripts": {
-    "start": "npm run docker:down && npm run docker:up",
+    "start": "npm run docker:down && npm run docker:build",
     "docker:build": "docker compose up --build",
     "docker:up": "docker compose up",
     "docker:down": "docker compose down",
