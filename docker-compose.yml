@@ -1,5 +1,5 @@
 services:
-  nextjs:
+  nextjs-web:
     build:
       context: ./apps/nextjs-web
       dockerfile: ../../docker/development/nextjs.Dockerfile
@@ -12,6 +12,9 @@ services:
     environment:
       - NODE_ENV=development
       - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_PUBLIC_API_URL=http://python-api:8000
+    depends_on:
+      - python-api
 
   python-api:
     build:
@@ -25,5 +28,3 @@ services:
       - ENVIRONMENT=development
     env_file:
       - ./apps/python-api/.env
-    depends_on:
-      - nextjs
