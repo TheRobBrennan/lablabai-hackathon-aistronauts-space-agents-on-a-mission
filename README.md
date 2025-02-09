@@ -93,3 +93,121 @@ Checklist of necessary steps to complete the mission:
     - Product Description
     - Presentation (not to exceed 5 minutes)
     - GitHub link with the demo
+
+# Satellite Imagery Analysis Platform
+
+## Project Structure
+```
+apps/
+├── nextjs-web/     # Frontend application
+└── python-api/     # Backend API service
+```
+
+## Setup Instructions
+
+### Prerequisites
+- Docker and Docker Compose
+- Node.js 18+ (for local development)
+- Python 3.11+ (for local development)
+- API keys for:
+  - Mapbox (for map visualization)
+  - NASA Earth Data
+  - OpenAI (for AI analysis)
+  - Sentinel Hub (optional)
+
+### Environment Setup
+
+1. **Frontend Setup (nextjs-web)**
+   ```bash
+   cd apps/nextjs-web
+   cp .env.example .env
+   ```
+   Add your Mapbox token to `.env`:
+   ```
+   NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=your_token_here
+   ```
+
+2. **Backend Setup (python-api)**
+   ```bash
+   cd apps/python-api
+   cp .env.example .env
+   ```
+   Add your API keys to `.env`:
+   ```
+   OPENAI_API_KEY=your_openai_key_here
+   NASA_API_KEY=your_nasa_key_here
+   SENTINEL_HUB_API_KEY=your_sentinel_hub_key_here
+   ```
+
+### Running with Docker
+
+1. **Start all services**
+   ```bash
+   docker-compose up --build
+   ```
+   This will start:
+   - Frontend at http://localhost:3000
+   - Backend API at http://localhost:8000
+
+2. **View API documentation**
+   - OpenAPI docs: http://localhost:8000/docs
+   - ReDoc: http://localhost:8000/redoc
+
+### Local Development
+
+1. **Frontend (Next.js)**
+   ```bash
+   cd apps/nextjs-web
+   npm install
+   npm run dev
+   ```
+
+2. **Backend (FastAPI)**
+   ```bash
+   cd apps/python-api
+   python -m venv venv
+   source venv/bin/activate  # or `venv\Scripts\activate` on Windows
+   pip install -r requirements.txt
+   uvicorn src.main:app --reload
+   ```
+
+## API Services
+
+The Python API provides:
+- Satellite imagery fetching
+- AI-powered analysis
+- Change detection
+- Report generation
+
+## Available Endpoints
+
+- `GET /health` - Health check endpoint
+- `GET /api/v1/...` - API endpoints (documentation in progress)
+
+## Development Workflow
+
+1. Frontend changes:
+   - Edit files in `apps/nextjs-web/src`
+   - Changes hot-reload in development
+
+2. Backend changes:
+   - Edit files in `apps/python-api/src`
+   - FastAPI auto-reloads on changes
+
+## Troubleshooting
+
+Common issues:
+1. **Port conflicts**: Ensure ports 3000 and 8000 are available
+2. **Environment variables**: Verify all required API keys are set
+3. **Docker issues**: Try removing containers and rebuilding:
+   ```bash
+   docker-compose down
+   docker-compose up --build
+   ```
+
+## Next Steps
+
+- [ ] Implement satellite imagery fetching
+- [ ] Add AI analysis capabilities
+- [ ] Create map overlays
+- [ ] Generate analysis reports

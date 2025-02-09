@@ -12,3 +12,18 @@ services:
     environment:
       - NODE_ENV=development
       - NEXT_TELEMETRY_DISABLED=1
+
+  python-api:
+    build:
+      context: ./apps/python-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./apps/python-api:/app
+    environment:
+      - ENVIRONMENT=development
+    env_file:
+      - ./apps/python-api/.env
+    depends_on:
+      - nextjs
