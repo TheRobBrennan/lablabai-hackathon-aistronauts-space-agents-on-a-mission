@@ -23,13 +23,13 @@ Design an AI agent that transforms space exploration - whether by automating tas
 
 Checklist of necessary steps to complete the mission:
 
-- [ ] Create or join a team on LabLab.ai
-- [ ] BRAINSTORM: 2-3 concepts for an AI agent solution that transforms space exploration
-    - [ ] After generating a list of potential solutions, the team should evaluate each idea based on factors such as feasibility, scalability, profitability, and market potential.
-    - [ ] Evaluate the feasibility of each idea: in terms of available AI models, required data, technical expertise, and potential impact.
-    - [ ] Resource Allocation: Consider the resources (timeline of hackathon, developers, availability of API Keys) needed to implement each idea. Choose ideas that align with available resources.
-- [ ] BUILD: Build a prototype for your solution
-- [ ] SUBMIT: Submit your solution to the hackathon
-    - [ ] Product Description
-    - [ ] Presentation (not to exceed 5 minutes)
-    - [ ] GitHub link with the demo
+- Create or join a team on LabLab.ai
+- BRAINSTORM: 2-3 concepts for an AI agent solution that transforms space exploration
+    - After generating a list of potential solutions, the team should evaluate each idea based on factors such as feasibility, scalability, profitability, and market potential.
+    - Evaluate the feasibility of each idea: in terms of available AI models, required data, technical expertise, and potential impact.
+    - Resource Allocation: Consider the resources (timeline of hackathon, developers, availability of API Keys) needed to implement each idea. Choose ideas that align with available resources.
+- BUILD: Build a prototype for your solution
+- SUBMIT: Submit your solution to the hackathon
+    - Product Description
+    - Presentation (not to exceed 5 minutes)
+    - GitHub link with the demo
