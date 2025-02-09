@@ -24,6 +24,11 @@ Design an AI agent that transforms space exploration - whether by automating tas
 ![](./screenshots/Screenshot%202025-02-08%20at%205.55.00 PM.png)
 ![](./screenshots/Screenshot%202025-02-08%20at%205.59.14 PM.png)
 
+## The Crew
+Members of the American Space Program will be joining us to help us build our AI agent.
+
+![](./screenshots/crew/43c699f2-e78c-4b37-9726-22d39a1d67f2.jpeg)
+
 ### Suggested Topics to Explore
 
 #### Automation of Space Operations
@@ -72,6 +77,7 @@ CrewAI is a modular, multi-agent framework enabling AI teams for streamlined wor
 Checklist of necessary steps to complete the mission:
 
 - Create or join a team on LabLab.ai
+- Review pitches from other teams for the hackathon - [OTHER_PITCHES.md](./OTHER_PITCHES.md)
 - BRAINSTORM: 2-3 concepts for an AI agent solution that transforms space exploration
     - After generating a list of potential solutions, the team should evaluate each idea based on factors such as feasibility, scalability, profitability, and market potential.
     - Evaluate the feasibility of each idea: in terms of available AI models, required data, technical expertise, and potential impact.
