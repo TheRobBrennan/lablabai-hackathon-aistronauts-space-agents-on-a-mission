@@ -18,7 +18,6 @@ export default function Map() {
     const [zoom] = useState(INITIAL_ZOOM);
     const [hasToken, setHasToken] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [isLocating, setIsLocating] = useState(false);
 
     // First useEffect to check token and set state
     useEffect(() => {
@@ -26,32 +25,6 @@ export default function Map() {
         console.log('Token available:', !!token);
         setHasToken(Boolean(token));
     }, []);
-
-    const centerOnUserLocation = () => {
-        setIsLocating(true);
-        if (!navigator.geolocation) {
-            setError('Geolocation is not supported by your browser');
-            setIsLocating(false);
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                if (map.current) {
-                    map.current.flyTo({
-                        center: [position.coords.longitude, position.coords.latitude],
-                        zoom: 12,
-                        essential: true
-                    });
-                }
-                setIsLocating(false);
-            },
-            (error) => {
-                setError(`Location error: ${error.message}`);
-                setIsLocating(false);
-            }
-        );
-    };
 
     // Separate useEffect for map initialization
     useEffect(() => {
@@ -76,6 +49,21 @@ export default function Map() {
                     center: [lng, lat],
                     zoom: zoom,
                 });
+
+                // Add navigation controls (zoom, compass, etc.)
+                map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+                // Add geolocation control
+                map.current.addControl(
+                    new mapboxgl.GeolocateControl({
+                        positionOptions: {
+                            enableHighAccuracy: true
+                        },
+                        trackUserLocation: true,
+                        showUserHeading: true
+                    }),
+                    'top-right'
+                );
 
                 map.current.on('load', () => {
                     console.log('Map loaded successfully');
@@ -117,15 +105,6 @@ export default function Map() {
     return (
         <div className="relative w-full h-[600px] rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
             <div ref={mapContainer} className="w-full h-full" />
-            <button
-                onClick={centerOnUserLocation}
-                disabled={isLocating}
-                className="absolute bottom-4 right-4 px-4 py-2 bg-white dark:bg-gray-800 rounded-md shadow-lg 
-                         text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700
-                         disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-                {isLocating ? 'Locating...' : 'Center on My Location'}
-            </button>
         </div>
     );
 } 
