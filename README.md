@@ -1,7 +1,7 @@
 # Welcome
 This is my project for a potential LabLab AI Hackathon submission for the [AIstronauts: Space Agents on a mission](https://lablab.ai/event/aistronauts-space-agents-on-a-mission) hackathon - held from **Friday, February 7th 2025 - 9:00 AM PST** to **Sunday, February 9th 2025 - 9:00 AM PST**.
 
-![](./screenshots/cm5xsfsfx000q357q5hktprpp_imageLink_xm1pbz0a98.png)
+![](./assets/hackathon/cm5xsfsfx000q357q5hktprpp_imageLink_xm1pbz0a98.png)
 
 Given that I am starting the project midway through the hackathon - roughly at **5:30 PM PST** on **Saturday, February 8th, 2025** - I will be curious to see what I wind up doing or creating. 😅
 
@@ -18,16 +18,16 @@ Source: [LabLab.AI AIstronauts: Space Agents on a mission](https://lablab.ai/eve
 ## Your mission
 Design an AI agent that transforms space exploration - whether by automating tasks, optimizing workflows, or solving key challenges. Build intelligent systems that create real impact!
 
-![](./screenshots/Screenshot%202025-02-08%20at%205.49.35 PM.png)
-![](./screenshots/Screenshot%202025-02-08%20at%205.52.10 PM.png)
-![](./screenshots/Screenshot%202025-02-08%20at%205.53.17 PM.png)
-![](./screenshots/Screenshot%202025-02-08%20at%205.55.00 PM.png)
-![](./screenshots/Screenshot%202025-02-08%20at%205.59.14 PM.png)
+![](./assets/hackathon/Screenshot%202025-02-08%20at%205.49.35 PM.png)
+![](./assets/hackathon/Screenshot%202025-02-08%20at%205.52.10 PM.png)
+![](./assets/hackathon/Screenshot%202025-02-08%20at%205.53.17 PM.png)
+![](./assets/hackathon/Screenshot%202025-02-08%20at%205.55.00 PM.png)
+![](./assets/hackathon/Screenshot%202025-02-08%20at%205.59.14 PM.png)
 
 ## The Crew
 Members of the American Space Program will be joining us to help us build our AI agent.
 
-![](./screenshots/crew/43c699f2-e78c-4b37-9726-22d39a1d67f2.jpeg)
+![](./assets/crew/43c699f2-e78c-4b37-9726-22d39a1d67f2.jpeg)
 
 ### Suggested Topics to Explore
 
@@ -77,7 +77,7 @@ CrewAI is a modular, multi-agent framework enabling AI teams for streamlined wor
 Checklist of necessary steps to complete the mission:
 
 - Create or join a team on LabLab.ai
-- Review pitches from other teams for the hackathon - [OTHER_PITCHES.md](./OTHER_PITCHES.md)
+- Review pitches from other teams for the hackathon - [OTHER_PITCHES.md](./documentation/OTHER_PITCHES.md)
 - BRAINSTORM: 2-3 concepts for an AI agent solution that transforms space exploration
     - After generating a list of potential solutions, the team should evaluate each idea based on factors such as feasibility, scalability, profitability, and market potential.
     - Evaluate the feasibility of each idea: in terms of available AI models, required data, technical expertise, and potential impact.

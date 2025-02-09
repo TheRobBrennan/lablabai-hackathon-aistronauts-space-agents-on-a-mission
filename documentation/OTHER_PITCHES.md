@@ -8,10 +8,10 @@ Space Tourism Personal Assistant: Your Ultimate Companion for Space Adventures �
 Category tags:
 Education, Travel, Assistant
 
-![](./screenshots/pitches/Screenshot%202025-02-08%20at%207.53.31 PM.png)
-![](./screenshots/pitches/Screenshot%202025-02-08%20at%207.53.47 PM.png)
-![](./screenshots/pitches/Screenshot%202025-02-08%20at%207.54.18 PM.png)
-![](./screenshots/pitches/Screenshot%202025-02-08%20at%207.54.24 PM.png)
+![](../assets/hackathon/pitches/Screenshot%202025-02-08%20at%207.53.31 PM.png)
+![](../assets/hackathon/pitches/Screenshot%202025-02-08%20at%207.53.47 PM.png)
+![](../assets/hackathon/pitches/Screenshot%202025-02-08%20at%207.54.18 PM.png)
+![](../assets/hackathon/pitches/Screenshot%202025-02-08%20at%207.54.24 PM.png)
 
 🎤 [Watch Pitch Video](https://storage.googleapis.com/lablab-video-submissions/cm5xsfsfx000q357q5hktprpp/raw/submission-video-x-cm5xsfsfx000q357q5hktprpp-cm6wiwkt9000q358qrljdh65r_k296te0mav.mp4)
 
@@ -55,9 +55,9 @@ The AI-powered Drone Delivery System hackathon aims to revolutionize the logisti
 Category tags:
 Transportation and Delivery
 
-![](./screenshots/pitches/Screenshot%202025-02-08%20at%208.04.13 PM.png)
-![](./screenshots/pitches/Screenshot%202025-02-08%20at%208.05.47 PM.png)
-![](./screenshots/pitches/Screenshot%202025-02-08%20at%208.06.09 PM.png)
+![](../assets/hackathon/pitches/Screenshot%202025-02-08%20at%208.04.13 PM.png)
+![](../assets/hackathon/pitches/Screenshot%202025-02-08%20at%208.05.47 PM.png)
+![](../assets/hackathon/pitches/Screenshot%202025-02-08%20at%208.06.09 PM.png)
 
 🎤 [Watch Pitch Video (~5:10)](https://storage.googleapis.com/lablab-video-submissions/cm5xsfsfx000q357q5hktprpp/raw/submission-video-x-cm5xsfsfx000q357q5hktprpp-cm6emg7sz001e357lnn64oyep_p9fkuc0hau.mp4)
 
