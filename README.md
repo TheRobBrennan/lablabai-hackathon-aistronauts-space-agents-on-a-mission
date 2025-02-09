@@ -5,6 +5,11 @@ This is my project for a potential LabLab AI Hackathon submission for the [AIstr
 
 Given that I am starting the project midway through the hackathon - roughly at **5:30 PM PST** on **Saturday, February 8th, 2025** - I will be curious to see what I wind up doing or creating. 😅
 
+> 78% of people “fail” at hackathons 😅
+
+Source: [LabLab.ai Hackathon Guide (~6:33)](https://www.youtube.com/watch?v=43PCWgt1Pn0)
+
+
 ## Your mission
 Design an AI agent that transforms space exploration - whether by automating tasks, optimizing workflows, or solving key challenges. Build intelligent systems that create real impact!
 
