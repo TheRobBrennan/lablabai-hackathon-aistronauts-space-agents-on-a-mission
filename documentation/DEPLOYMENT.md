@@ -41,7 +41,7 @@ https://lablabai-hackathon-aistronauts-space-agents-on-a-mission.vercel.app
    - styles:read
    - styles:tiles
    - fonts:read
-   - maps:read
+   - map:read
 
 ### Local Development Setup
 1. Copy `.env.example` to `.env.local` in the `apps/nextjs-web` directory
