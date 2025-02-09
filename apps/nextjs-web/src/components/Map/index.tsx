@@ -5,19 +5,34 @@ import mapboxgl from 'mapbox-gl';
 import MapFallback from './MapFallback';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-// Default coordinates (we can update these later)
-const INITIAL_LNG = -122.4194;  // San Francisco
-const INITIAL_LAT = 37.7749;
-const INITIAL_ZOOM = 9;
+// Default coordinates (fallback if no stored location)
+const DEFAULT_LNG = -122.4194;  // San Francisco
+const DEFAULT_LAT = 37.7749;
+const DEFAULT_ZOOM = 9;
+
+// LocalStorage keys
+const STORAGE_KEYS = {
+    lng: 'map_last_lng',
+    lat: 'map_last_lat',
+    zoom: 'map_last_zoom',
+} as const;
 
 export default function Map() {
     const mapContainer = useRef<HTMLDivElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
-    const [lng] = useState(INITIAL_LNG);
-    const [lat] = useState(INITIAL_LAT);
-    const [zoom] = useState(INITIAL_ZOOM);
     const [hasToken, setHasToken] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    // Get stored coordinates or use defaults
+    const getStoredLocation = () => {
+        if (typeof window === 'undefined') return { lng: DEFAULT_LNG, lat: DEFAULT_LAT, zoom: DEFAULT_ZOOM };
+
+        return {
+            lng: parseFloat(localStorage.getItem(STORAGE_KEYS.lng) || '') || DEFAULT_LNG,
+            lat: parseFloat(localStorage.getItem(STORAGE_KEYS.lat) || '') || DEFAULT_LAT,
+            zoom: parseFloat(localStorage.getItem(STORAGE_KEYS.zoom) || '') || DEFAULT_ZOOM,
+        };
+    };
 
     // First useEffect to check token and set state
     useEffect(() => {
@@ -43,6 +58,8 @@ export default function Map() {
                 const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
                 mapboxgl.accessToken = token;
 
+                const { lng, lat, zoom } = getStoredLocation();
+
                 map.current = new mapboxgl.Map({
                     container: mapContainer.current,
                     style: 'mapbox://styles/mapbox/satellite-v9',
@@ -54,19 +71,33 @@ export default function Map() {
                 map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
                 // Add geolocation control
-                map.current.addControl(
-                    new mapboxgl.GeolocateControl({
-                        positionOptions: {
-                            enableHighAccuracy: true
-                        },
-                        trackUserLocation: true,
-                        showUserHeading: true
-                    }),
-                    'top-right'
-                );
+                const geolocateControl = new mapboxgl.GeolocateControl({
+                    positionOptions: {
+                        enableHighAccuracy: true
+                    },
+                    trackUserLocation: true,
+                    showUserHeading: true
+                });
 
+                map.current.addControl(geolocateControl, 'top-right');
+
+                // Store location when map moves
+                map.current.on('moveend', () => {
+                    if (!map.current) return;
+                    const center = map.current.getCenter();
+                    const zoom = map.current.getZoom();
+
+                    localStorage.setItem(STORAGE_KEYS.lng, center.lng.toString());
+                    localStorage.setItem(STORAGE_KEYS.lat, center.lat.toString());
+                    localStorage.setItem(STORAGE_KEYS.zoom, zoom.toString());
+                });
+
+                // Trigger geolocation on first load if no stored location
                 map.current.on('load', () => {
                     console.log('Map loaded successfully');
+                    if (!localStorage.getItem(STORAGE_KEYS.lat)) {
+                        geolocateControl.trigger();
+                    }
                 });
 
                 map.current.on('error', (e) => {
@@ -85,7 +116,7 @@ export default function Map() {
         return () => {
             map.current?.remove();
         };
-    }, [hasToken, lng, lat, zoom]);
+    }, [hasToken]);
 
     if (error) {
         return (
