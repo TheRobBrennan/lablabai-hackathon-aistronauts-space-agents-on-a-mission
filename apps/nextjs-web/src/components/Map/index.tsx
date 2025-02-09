@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
+import MapFallback from './MapFallback';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 // Default coordinates (we can update these later)
@@ -15,15 +16,13 @@ export default function Map() {
     const [lng] = useState(INITIAL_LNG);
     const [lat] = useState(INITIAL_LAT);
     const [zoom] = useState(INITIAL_ZOOM);
+    const [hasToken, setHasToken] = useState(false);
 
     useEffect(() => {
-        if (!mapContainer.current || map.current) return;
-
         const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
-        if (!token) {
-            console.error('Mapbox token not found');
-            return;
-        }
+        setHasToken(Boolean(token));
+
+        if (!mapContainer.current || map.current || !token) return;
 
         mapboxgl.accessToken = token;
 
@@ -39,6 +38,10 @@ export default function Map() {
             map.current?.remove();
         };
     }, [lng, lat, zoom]);
+
+    if (!hasToken) {
+        return <MapFallback />;
+    }
 
     return (
         <div className="relative w-full h-[600px] rounded-lg overflow-hidden">
